@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "112061913106",
+    "project_id": "supriyadigitalproducer-6eafe",
+    "storage_bucket": "supriyadigitalproducer-6eafe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112061913106:android:d7d934f362cc695ce4a0cb",
+        "android_client_info": {
+          "package_name": "com.example.supriyadigitalproducerfinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnn3yRvO74NLNRgWU3Oo4b-3WQC4fCUlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
