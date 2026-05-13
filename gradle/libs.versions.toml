@@ -1,7 +1,7 @@
 ## This section defines the version numbers for your libraries and plugins.
 [versions]
-androidApplication = "8.13.2"
-kotlinAndroid = "1.9.23" # Make sure this is the version
+androidApplication = "9.0.1"
+kotlinAndroid = "2.2.10" # Make sure this is the version
 coreKtx = "1.13.1"
 lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
@@ -39,3 +39,4 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidApplication" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinAndroid" }

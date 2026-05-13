@@ -2,14 +2,55 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Internet + network state for Firestore -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.SEND_SMS" tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
 
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <!-- Notifications (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- SMS for event reminders -->
+    <uses-permission android:name="android.permission.SEND_SMS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Biometric auth -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!--
+        MANIFEST FIX: USE_FINGERPRINT added alongside USE_BIOMETRIC.
+        On Android 9 (API 28) some devices require the older fingerprint
+        permission even when using the newer BiometricPrompt API.
+    -->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <!--
+        MANIFEST FIX: READ_EXTERNAL_STORAGE for API 29-32.
+        Needed so the PDF share intent can open the saved file on
+        Android 10-12. Capped at maxSdkVersion 32 because API 33+
+        uses READ_MEDIA_* permissions instead.
+    -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!--
+        MANIFEST FIX: READ_MEDIA_DOCUMENTS for API 33+.
+        Allows the app to read back saved PDFs from Documents/ on
+        Android 13 and above when sharing via intent.
+    -->
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        tools:ignore="MediaCapture" />
+
+    <!-- Storage write — only needed below API 29; scoped storage handles the rest -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- Telephony is optional — SMS still works on tablets without a SIM -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:name=".ProducerApplication"
@@ -20,18 +61,42 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SupriyaDigitalProducerFinal"
-        tools:targetApi="31">
+        android:theme="@style/Theme.SupriyaDigitalProducerFinal">
 
+        <!--
+            MANIFEST FIX: windowSoftInputMode="adjustResize" added.
+            Without this the keyboard pushes dialogs with text fields
+            off-screen or overlaps them on smaller devices.
+        -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.SupriyaDigitalProducerFinal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+            MANIFEST FIX: FileProvider added for API 28 and below.
+            On Android 9 and earlier a raw file:// URI in an ACTION_SEND
+            intent throws FileUriExposedException. FileProvider converts it
+            to a safe content:// URI that receiving apps can open.
+
+            The res/xml/file_paths.xml resource is required — see below.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

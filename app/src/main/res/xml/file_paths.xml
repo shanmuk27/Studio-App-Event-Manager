@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Required by the FileProvider declared in AndroidManifest.xml.
+    Grants safe content:// URI access to the app's external Documents
+    folder so the PDF share intent works on Android 9 (API 28) and below
+    without triggering FileUriExposedException.
+
+    Place this file at:
+    app/src/main/res/xml/file_paths.xml
+-->
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Covers Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS)
+        which is where createEventBillPdf() saves PDFs on API 28 and below.
+    -->
+    <external-path
+        name="external_documents"
+        path="Documents/SupriyaDigital/" />
+
+    <!--
+        Covers the app's own external files directory as a fallback
+        in case the device routes Documents writes here.
+    -->
+    <external-files-path
+        name="external_files"
+        path="Documents/SupriyaDigital/" />
+
+</paths>
